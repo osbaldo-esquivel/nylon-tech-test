@@ -13,12 +13,20 @@
             <label for="ssn">SSN</label>
             <input type="password" id="ssn" v-model="socialSecurityNumber" />
             <button type="submit" @click="handleSubmit">Submit</button>
+            <button @click="handleClear">Clear</button>
+        </div>
+        <div v-if="isUserSavedSuccessfully">User saved successfully</div>
+        <div v-if="hasResponseError">There was an issue saving the user details
+            <ul v-for="(error, index) in errorResponse" :key="index">
+                <li>{{ error[0] }}</li>
+            </ul>
         </div>
     </div>
 </template>
 
 <script>
 import { ref } from 'vue';
+import axios from 'axios';
 
 export default {
     setup() {
@@ -26,17 +34,47 @@ export default {
         const lastName = ref('');
         const email = ref('');
         const socialSecurityNumber = ref(null);
+        const isUserSavedSuccessfully = ref(false);
+        const hasResponseError = ref(false);
+        const errorResponse = ref(null);
 
         const handleSubmit = () => {
-            console.log(firstName.value, lastName.value, email.value, socialSecurityNumber.value);
-        }
+            axios.post('/api/users', {
+                firstName: firstName.value,
+                lastName: lastName.value,
+                email: email.value,
+                ssn: socialSecurityNumber.value
+            }).then((response) => {
+                isUserSavedSuccessfully.value = true;
+            }).catch((error) => {
+                hasResponseError.value = true;
+
+                if (error.response.data.errors) {
+                    errorResponse.value = error.response.data.errors;
+                }
+            });
+        };
+
+        const handleClear = () => {
+            firstName.value = '';
+            lastName.value = '';
+            email.value = '';
+            socialSecurityNumber.value = null;
+            isUserSavedSuccessfully.value = false;
+            hasResponseError.value = false;
+            errorResponse.value = null;
+        };
 
         return {
             firstName,
             lastName,
             email,
             socialSecurityNumber,
-            handleSubmit
+            handleSubmit,
+            isUserSavedSuccessfully,
+            hasResponseError,
+            handleClear,
+            errorResponse
         };
     }
 }
