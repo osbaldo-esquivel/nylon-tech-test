@@ -21,3 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/users', [UserController::class, 'create']);
 Route::get('/users', [UserController::class, 'getAll']);
+Route::post('/users/disable/{id}', [UserController::class, 'disable']);
+Route::post('/users/enable/{id}', [UserController::class, 'enable']);

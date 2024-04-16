@@ -4,7 +4,7 @@
             <h1>Admin Page</h1>
         </div>
         <div>
-            <table>
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th v-for="(column, index) in columns" :key="column">
@@ -12,6 +12,7 @@
                                 {{ column }}
                             </a>
                         </th>
+                        <th id="disabled">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -20,6 +21,11 @@
                         <td>{{ user.last_name }}</td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.ssn }}</td>
+                        <td>{{ user.is_disabled ? 'Yes' : 'No' }}</td>
+                        <td>
+                            <button @click="handleDisable(user.id)">Disable</button>
+                            <button @click="handleEnable(user.id)">Enable</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -41,7 +47,7 @@ export default {
         const users = ref([]);
         const sortKey = ref('');
         const direction = ref('desc');
-        const columns = ['first_name', 'last_name', 'email', 'ssn'];
+        const columns = ['first_name', 'last_name', 'email', 'ssn', 'is_disabled'];
 
         const sortBy = (currentSortKey) => {
             direction.value = direction.value == 'desc'
@@ -51,6 +57,38 @@ export default {
             sortKey.value = currentSortKey;
 
             users.value = _.orderBy(users.value, [sortKey.value], [direction.value]);
+        };
+
+        const handleDisable = (id) => {
+            axios.post('/api/users/disable/'+id)
+            .then((response) => {
+                axios.get('/api/users')
+                .then((response) => {
+                    users.value = response.data;
+                })
+                .catch((error) => {
+
+                });
+            })
+            .catch((error) => {
+
+            });
+        };
+
+        const handleEnable = (id) => {
+            axios.post('/api/users/enable/'+id)
+            .then((response) => {
+                axios.get('/api/users')
+                .then((response) => {
+                    users.value = response.data;
+                })
+                .catch((error) => {
+
+                });
+            })
+            .catch((error) => {
+
+            });
         };
 
         onMounted(() => {
@@ -68,7 +106,9 @@ export default {
             sortKey,
             direction,
             columns,
-            sortBy
+            sortBy,
+            handleDisable,
+            handleEnable
         }
     }
 }
@@ -83,5 +123,9 @@ a {
 a.active {
   font-weight: bold;
   color: blue;
+}
+
+#disabled {
+    font-weight: normal;
 }
 </style>

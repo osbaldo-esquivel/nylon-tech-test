@@ -3,16 +3,16 @@
         <div>
             <h1>Add user</h1>
         </div>
-        <div>
+        <div class="inputs">
             <label for="first-name">First name</label>
-            <input id="first-name" v-model="firstName" />
+            <input class="form-control" id="first-name" v-model="firstName" />
             <label for="last-name">Last name</label>
             <input id="last-name" v-model="lastName" />
             <label for="email">Email</label>
             <input type="email" id="email" v-model="email" />
             <label for="ssn">SSN</label>
             <input type="password" id="ssn" v-model="socialSecurityNumber" />
-            <button type="submit" @click="handleSubmit">Submit</button>
+            <button class="btn" type="submit" @click="handleSubmit">Submit</button>
             <button @click="handleClear">Clear</button>
         </div>
         <div v-if="isUserSavedSuccessfully">User saved successfully</div>
@@ -84,3 +84,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.inputs {
+    width: 100%;
+}
+</style>

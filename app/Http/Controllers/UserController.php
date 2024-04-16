@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserCreateRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -24,5 +25,23 @@ class UserController extends Controller
     {
         return User::query()
             ->get();
+    }
+
+    public function disable(Request $request): void
+    {
+        User::query()
+            ->find($request->id)
+            ->update([
+                'is_disabled' => true,
+            ]);
+    }
+
+    public function enable(Request $request): void
+    {
+        User::query()
+            ->find($request->id)
+            ->update([
+                'is_disabled' => false,
+            ]);
     }
 }
