@@ -21,6 +21,11 @@
                 <li>{{ error[0] }}</li>
             </ul>
         </div>
+        <div>
+            <button>
+                <router-link to="/admin">Admin</router-link>
+            </button>
+        </div>
     </div>
 </template>
 

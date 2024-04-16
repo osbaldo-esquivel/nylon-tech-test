@@ -12,7 +12,7 @@ class UserCreateRequest extends FormRequest
             'firstName' => 'required|string|max:25',
             'lastName' => 'required|string|max:25',
             'email' => 'required|email',
-            'ssn' => 'required|integer|min:9|max:9',
+            'ssn' => 'required|string',
         ];
     }
 }
