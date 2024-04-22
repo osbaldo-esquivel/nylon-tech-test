@@ -2,20 +2,21 @@
 
 namespace App\Domains\Users\Services;
 
+use App\Domains\Users\Inputs\CreateInput;
 use App\Domains\Users\Models\Relational\User;
 use Illuminate\Database\Eloquent\Collection;
 
 class UsersService implements UsersServiceContract
 {
-    public function create(string $firstName, string $lastName, string $email, string $ssn): User
+    public function create(CreateInput $input): User
     {
         return User::query()
             ->create([
-                'first_name' => $firstName,
-                'last_name' => $lastName,
-                'ssn' => $ssn,
-                'email' => $email,
-                'is_disabled' => false,
+                'first_name' => $input->firstName,
+                'last_name' => $input->lastName,
+                'ssn' => $input->ssn,
+                'email' => $input->email,
+                'is_disabled' => $input->isDisabled,
             ]);
     }
 
